@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Form } from "react-router-dom";
+import { Form, redirect, useNavigation } from "react-router-dom";
+import { createOrder } from "../../services/apiRestaurant";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -34,6 +35,8 @@ const fakeCart = [
 function CreateOrder() {
   // const [withPriority, setWithPriority] = useState(false);
   const cart = fakeCart;
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
 
   return (
     <div>
@@ -72,7 +75,15 @@ function CreateOrder() {
 
         <div>
           <input type="hidden" value={JSON.stringify(cart)} name="cart" />
-          <button>Order now</button>
+
+          {/* did this  the firt try 
+
+          isSubmittig ? button with disabled : button with no disabled 
+          lmao 
+          correct and precise one is line below 
+           */}
+
+          <button disabled={isSubmitting}>Order now</button>
         </div>
       </Form>
     </div>
@@ -85,7 +96,6 @@ function CreateOrder() {
 export async function action({ request }) {
   const formdata = await request.formData();
   const data = Object.fromEntries(formdata);
-  console.log(data);
 
   const order = {
     ...data,
@@ -93,8 +103,11 @@ export async function action({ request }) {
     priority: data.priority === "on",
   };
 
-  console.log(order);
-  return null;
+  const newOrder = await createOrder(order);
+
+  // rederict is react-router function since we can't use hooks inside of functions
+
+  return redirect(`/order/${newOrder.id}`);
 }
 
 export default CreateOrder;
