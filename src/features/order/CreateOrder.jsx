@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Form } from "react-router-dom";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -38,7 +39,7 @@ function CreateOrder() {
     <div>
       <h2>Ready to order? Let's go!</h2>
 
-      <form>
+      <Form method="POST">
         <div>
           <label>First Name</label>
           <input type="text" name="customer" required />
@@ -70,11 +71,30 @@ function CreateOrder() {
         </div>
 
         <div>
+          <input type="hidden" value={JSON.stringify(cart)} name="cart" />
           <button>Order now</button>
         </div>
-      </form>
+      </Form>
     </div>
   );
+}
+
+// creating an action function
+// when ever the Form above is sumbitted the action function is going to be invoked with the request submitted!
+
+export async function action({ request }) {
+  const formdata = await request.formData();
+  const data = Object.fromEntries(formdata);
+  console.log(data);
+
+  const order = {
+    ...data,
+    cart: JSON.parse(data.cart),
+    priority: data.priority === "on",
+  };
+
+  console.log(order);
+  return null;
 }
 
 export default CreateOrder;
