@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, redirect, useNavigation } from "react-router-dom";
+import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
 
 // https://uibakery.io/regex-library/phone-number
@@ -38,6 +38,10 @@ function CreateOrder() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
+  // since this component is connected with the action in the route it has access to the data returned from action
+
+  const formErrors = useActionData();
+
   return (
     <div>
       <h2>Ready to order? Let's go!</h2>
@@ -52,6 +56,7 @@ function CreateOrder() {
           <label>Phone number</label>
           <div>
             <input type="tel" name="phone" required />
+            {formErrors?.phone && <p>{formErrors.phone}</p>}
           </div>
         </div>
 
@@ -74,6 +79,8 @@ function CreateOrder() {
         </div>
 
         <div>
+          {/* 
+        getting data like cart in thi case using a hidden input field and setting value attrb to cart => cart is then accessed by the action function and returned as a key in the res object  */}
           <input type="hidden" value={JSON.stringify(cart)} name="cart" />
 
           {/* did this  the firt try 
@@ -83,7 +90,9 @@ function CreateOrder() {
           correct and precise one is line below 
            */}
 
-          <button disabled={isSubmitting}>Order now</button>
+          <button disabled={isSubmitting}>
+            {isSubmitting ? "Placing order" : "Order now"}
+          </button>
         </div>
       </Form>
     </div>
@@ -92,8 +101,14 @@ function CreateOrder() {
 
 // creating an action function
 // when ever the Form above is sumbitted the action function is going to be invoked with the request submitted!
+// link the action function with the comp router
 
 export async function action({ request }) {
+  //fomr data is a web api
+  //The FormData interface provides a way to construct a set of key/value pairs representing form fields and their values, which can be sent using the fetch(), XMLHttpRequest.send() or navigator.sendBeacon() methods. It uses the same format a form would use if the encoding type were set to "multipart/form-data".
+
+  //https://developer.mozilla.org/en-US/docs/Web/API/FormData
+
   const formdata = await request.formData();
   const data = Object.fromEntries(formdata);
 
@@ -102,6 +117,16 @@ export async function action({ request }) {
     cart: JSON.parse(data.cart),
     priority: data.priority === "on",
   };
+
+  // Form Valdation
+
+  const errors = {};
+  if (!isValidPhone(order.phone))
+    errors.phone = "Please Provide A valid Phone number";
+
+  // returning the errors object if it container a key value
+
+  if (Object.keys(errors).length > 0) return errors;
 
   const newOrder = await createOrder(order);
 
