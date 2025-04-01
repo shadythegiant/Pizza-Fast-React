@@ -25,3 +25,7 @@
     background-position: 0% 50%, 50% 50%, 100% 100%;
   }
 }
+
+.scroll-width-0 {
+  scrollbar-width: none;
+}

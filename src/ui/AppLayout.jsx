@@ -9,15 +9,17 @@ export default function AppLayout() {
 
   console.log(navigation);
   return (
-    <div className="layout">
+    <div className="grid h-screen grid-rows-[auto_1fr_auto] ">
       {isLoading && <Loader />}
       {/* ----------- Header component  -----------------  */}
       <Header />
 
       {/* ------------ Main  ---------------------- */}
-      <main>
-        <Outlet />
-      </main>
+      <div className="overflow-scroll">
+        <main className=" max-w-3xl  scroll-width-0 mx-auto">
+          <Outlet />
+        </main>
+      </div>
 
       {/* ----------- CartOverView -------------------  */}
       <CartOverview />
