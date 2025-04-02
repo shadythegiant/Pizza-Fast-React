@@ -8,7 +8,7 @@ function Error() {
     <div>
       <h1>Something went wrong 😢</h1>
       <p>{error.data || error.message}</p>
-      <button onClick={() => navigate(-1)}>&larr; Go back</button>
+      <button onClick={() => navigate(-1)} className="hover:text-stone-900 hover:underline">&larr; Go back</button>
     </div>
   );
 }
