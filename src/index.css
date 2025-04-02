@@ -5,7 +5,11 @@
 
 @layer components { 
   .input {
-    @apply rounded-full border focus:outline-none focus:ring focus:ring-yellow-500 px-4 py-2 w-full md:px-6 md:py-3 my-3;
+    @apply rounded-full border focus:outline-none focus:ring focus:ring-yellow-500 px-4 py-2  md:px-6 md:py-3 my-3;
+  }
+
+  .order-input {
+    @apply mb-5 flex flex-col   gap-2 sm:flex-row  sm:items-center; 
   }
 }
 /* https://dev.to/afif/i-made-100-css-loaders-for-your-next-project-4eje */

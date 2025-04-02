@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import CartItem from "./CartItem"
 
 const fakeCart = [
   {
@@ -28,14 +29,18 @@ function Cart() {
   const cart = fakeCart;
 
   return (
-    <div>
+    <div className='py-3 px-4'>
       <Link to="/menu" className='text-sm text-blue-500 hover:text-blue-900 hover:underline'>&larr; Back to menu</Link>
 
-      <h2>Your cart, %NAME%</h2>
+      <h2 className='mt-7 font-semibold text-xl'>Your cart, %NAME%</h2>
 
-      <div>
-        <Link to="/order/new" className="bg-yellow-300 py-3 px-3 my-4 sm:px-6 sm:py-4 font-semibold uppercase inline-block  tracking-wide text-stone-900 rounded-full hover:bg-yellow-500 transition-colors duration-300 focus:outline-none focus:ring focus:ring-yellow-400 disabled:cursor-not-allowed">Order pizzas</Link>
-        <button>Clear cart</button>
+      <ul className='divide-y divide-stone-300 border-b my-3'>
+       {cart.map(item  => <CartItem item={item} key={item.key} /> )}
+      </ul>
+
+      <div className='space-x-2'>
+        <Link to="/order/new" className="bg-yellow-500 py-2 px-2 my-4 sm:px-3 sm:py-2 font-semibold uppercase inline-block  tracking-wide text-stone-900 rounded-full hover:bg-yellow-500 transition-colors duration-300 focus:outline-none focus:ring focus:ring-yellow-400 disabled:cursor-not-allowed">Order pizzas</Link>
+        <button className=" border border-stone-300 py-2 px-2 my-4 sm:px-3 sm:py-2 font-semibold uppercase inline-block  tracking-wide text-stone-900 rounded-full hover:bg-stone-400 transition-colors duration-300 focus:outline-none focus:ring focus:ring-yellow-400 disabled:cursor-not-allowed">Clear cart</button>
       </div>
     </div>
   );
