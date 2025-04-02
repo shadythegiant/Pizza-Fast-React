@@ -1,6 +1,12 @@
-function Button({children, disabled}) { 
+function Button({children, disabled, type}) { 
+
+  const base = "bg-yellow-500  my-4  font-semibold uppercase inline-block  tracking-wide text-stone-900 rounded-full hover:bg-yellow-300 transition-colors duration-300 focus:outline-none focus:ring focus:ring-yellow-400 disabled:cursor-not-allowed"; 
+  const styles = {
+    primary : base + 'py-3 px-3 md:px-6 md:py-4 ',
+    small : base + ' py-1 px-1 md:px-3 md:py-3 text-xs'
+  }
     return (
-        <button disabled={disabled} className="bg-yellow-300 py-3 px-3 my-4 sm:px-6 sm:py-4 font-semibold uppercase inline-block  tracking-wide text-stone-900 rounded-full hover:bg-yellow-500 transition-colors duration-300 focus:outline-none focus:ring focus:ring-yellow-400 disabled:cursor-not-allowed">
+        <button disabled={disabled} className={styles[type]}>
       {children}
       </button>
     )
