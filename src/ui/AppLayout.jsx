@@ -8,15 +8,16 @@ export default function AppLayout() {
   const isLoading = navigation.state === "loading";
 
   console.log(navigation);
+
   return (
     <div className="grid h-screen grid-rows-[auto_1fr_auto] ">
-      {isLoading  && <Loader />}
+      {isLoading && <Loader />}
       {/* ----------- Header component  -----------------  */}
       <Header />
 
       {/* ------------ Main  ---------------------- */}
       <div className="overflow-scroll">
-        <main className=" max-w-3xl  scroll-width-0 mx-auto">
+        <main className=" max-w-3xl  scroll-width-0 mx-auto main ">
           <Outlet />
         </main>
       </div>
