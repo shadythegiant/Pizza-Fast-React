@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import CartItem from "./CartItem"
+import { useSelector } from 'react-redux';
 
 const fakeCart = [
   {
