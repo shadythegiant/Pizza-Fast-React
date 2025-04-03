@@ -27,12 +27,13 @@ const fakeCart = [
 
 function Cart() {
   const cart = fakeCart;
+  const username = useSelector(state => state.user.username);
 
   return (
     <div className='py-3 px-4'>
       <Link to="/menu" className='text-sm text-blue-500 hover:text-blue-900 hover:underline'>&larr; Back to menu</Link>
 
-      <h2 className='mt-7 font-semibold text-xl'>Your cart, %NAME%</h2>
+      <h2 className='mt-7 font-semibold text-xl'>Your cart, {username}</h2>
 
       <ul className='divide-y divide-stone-300 border-b my-3'>
        {cart.map(item  => <CartItem item={item} key={item.key} /> )}

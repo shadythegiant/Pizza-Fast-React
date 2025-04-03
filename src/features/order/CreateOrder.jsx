@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
+import { useSelector } from "react-redux";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -38,6 +39,7 @@ function CreateOrder() {
   const cart = fakeCart;
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+  const username = useSelector(state => state.user.username);
 
   // since this component is connected with the action in the route it has access to the data returned from action
 
@@ -50,7 +52,7 @@ function CreateOrder() {
       <Form method="POST">
         <div className="order-input ">
           <label className="sm:basis-40">First Name</label>
-          <input type="text" name="customer" className="input grow" required />
+          <input type="text" name="customer" className="input grow" defaultValue={username} required />
         </div>
 
         <div className="order-input">
