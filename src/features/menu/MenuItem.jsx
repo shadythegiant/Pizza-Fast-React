@@ -1,11 +1,19 @@
 import { formatCurrency } from "../../utils/helpers";
 import Button from "../../ui/Button"
-import { useDispatch } from "react-redux";
-import { addItem } from "../cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem, getCurrenQuantity } from "../cart/cartSlice";
+import DeleteItem from "../cart/DeleteItem"
 
 function MenuItem({ pizza }) {
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
   const dispatch = useDispatch();
+  // get function 
+
+
+
+  const currentQuantity = useSelector(getCurrenQuantity(id)); 
+  const isInCart = currentQuantity > 0; 
+ 
 
   // handle events 
 
@@ -31,7 +39,9 @@ function MenuItem({ pizza }) {
         <div className="my-auto flex justify-between items-center">
          
           {!soldOut ? <p className="text-sm">{formatCurrency(unitPrice)}</p> : <p className="text-sm uppercase font-semibold">Sold out</p>}
-          {!soldOut && <Button type='small' onClick={handleAddItem}>Add to cart</Button>}
+          {/* delete item  */}
+          {isInCart && <DeleteItem action={id} />}
+          {!soldOut && !isInCart &&  <Button type='small' onClick={handleAddItem}>Add to cart  </Button>}
         </div>
       </div>
     </li>

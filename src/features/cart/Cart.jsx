@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import CartItem from "./CartItem"
 import { useDispatch, useSelector } from 'react-redux';
 import EmptyCart from "./EmptyCart"
+import { clearCart } from './cartSlice';
 
 // const fakeCart = [
 //   {

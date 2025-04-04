@@ -109,3 +109,7 @@ export const {
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
+
+
+export const  getCurrenQuantity = 
+  (id) => (state) => state.cart.cart.find(item => item.pizzaId === id )?.quantity ?? 0; 
