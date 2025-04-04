@@ -3,6 +3,9 @@ import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
 import { useSelector } from "react-redux";
+import EmptyCart from "../cart/EmptyCart";
+import store from "../../store";
+import { clearCart } from "../cart/cartSlice";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -10,63 +13,82 @@ const isValidPhone = (str) =>
     str
   );
 
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: "Mediterranean",
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: "Vegetale",
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: "Spinach and Mushroom",
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
+// const fakeCart = [
+//   {
+//     pizzaId: 12,
+//     name: "Mediterranean",
+//     quantity: 2,
+//     unitPrice: 16,
+//     totalPrice: 32,
+//   },
+//   {
+//     pizzaId: 6,
+//     name: "Vegetale",
+//     quantity: 1,
+//     unitPrice: 13,
+//     totalPrice: 13,
+//   },
+//   {
+//     pizzaId: 11,
+//     name: "Spinach and Mushroom",
+//     quantity: 1,
+//     unitPrice: 15,
+//     totalPrice: 15,
+//   },
+// ];
 
 function CreateOrder() {
   // const [withPriority, setWithPriority] = useState(false);
-  const cart = fakeCart;
+  const cart = useSelector((state) => state.cart.cart);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-  const username = useSelector(state => state.user.username);
+  const username = useSelector((state) => state.user.username);
 
   // since this component is connected with the action in the route it has access to the data returned from action
 
   const formErrors = useActionData();
 
+  if (!cart.length) return <EmptyCart />;
+
   return (
     <div className="px-6 py-6">
-      <h2 className="text-center text-stone-900 text-lg font-semibold mb-8">Ready to order? Let's go!</h2>
+      <h2 className="text-center text-stone-900 text-lg font-semibold mb-8">
+        Ready to order? Let's go!
+      </h2>
 
       <Form method="POST">
         <div className="order-input ">
           <label className="sm:basis-40">First Name</label>
-          <input type="text" name="customer" className="input grow" defaultValue={username} required />
+          <input
+            type="text"
+            name="customer"
+            className="input grow"
+            defaultValue={username}
+            required
+          />
         </div>
 
         <div className="order-input">
-          <label  className="sm:basis-40" >Phone number</label>
+          <label className="sm:basis-40">Phone number</label>
           <div className="grow">
-            <input type="tel" name="phone" className="input w-full " required  />
-            {formErrors?.phone && <p className="text-xs mt-2 text-center text-red-700 py-2 px-2  bg-red-100 font-semibold rounded-full">{formErrors.phone}</p>}
+            <input type="tel" name="phone" className="input w-full " required />
+            {formErrors?.phone && (
+              <p className="text-xs mt-2 text-center text-red-700 py-2 px-2  bg-red-100 font-semibold rounded-full">
+                {formErrors.phone}
+              </p>
+            )}
           </div>
         </div>
 
         <div className="order-input">
           <label className="sm:basis-40">Address</label>
           <div className="grow">
-            <input type="text" name="address" className="input w-full" required />
+            <input
+              type="text"
+              name="address"
+              className="input w-full"
+              required
+            />
           </div>
         </div>
 
@@ -79,7 +101,9 @@ function CreateOrder() {
             // value={withPriority}
             // onChange={(e) => setWithPriority(e.target.checked)}
           />
-          <label htmlFor="priority" className="font-medium " >Want to yo give your order priority?</label>
+          <label htmlFor="priority" className="font-medium ">
+            Want to yo give your order priority?
+          </label>
         </div>
 
         <div>
@@ -94,7 +118,10 @@ function CreateOrder() {
           correct and precise one is line below 
            */}
 
-         <Button disabled={isSubmitting} type='primary'  > {isSubmitting ? 'placing Order' :  "order now"} </Button>
+          <Button disabled={isSubmitting} type="primary">
+            {" "}
+            {isSubmitting ? "placing Order" : "order now"}{" "}
+          </Button>
         </div>
       </Form>
     </div>
@@ -131,6 +158,10 @@ export async function action({ request }) {
   if (Object.keys(errors).length > 0) return errors;
 
   const newOrder = await createOrder(order);
+
+  //
+
+  store.dispatch(clearCart());
 
   // rederict is react-router function since we can't use hooks inside of functions
 
