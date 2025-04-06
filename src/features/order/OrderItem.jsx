@@ -1,7 +1,7 @@
 import { formatCurrency } from "../../utils/helpers";
 
 function OrderItem({ item, isLoadingIngredients, ingredients }) {
-  const { quantity, name, totalPrice } = item;
+  const { quantity, name, totalPrice, pizzaId } = item;
 
   return (
     <li className="py-3">

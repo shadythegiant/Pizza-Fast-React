@@ -8,6 +8,7 @@ import CreateOrder, {
   action as createOrderAction,
 } from "./features/order/CreateOrder";
 import AppLayout from "./ui/AppLayout";
+import { actionFetcher } from "./features/order/UpdateOrder";
 
 // createBrowserRouter();
 const router = createBrowserRouter([
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
         element: <Order />,
         loader: orderLoader,
         errorElement: <Error />,
+        action: actionFetcher,
       },
       {
         path: "/order/new",

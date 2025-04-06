@@ -9,10 +9,12 @@ import {
   formatDate,
 } from "../../utils/helpers";
 import { useEffect } from "react";
+import UpdateOrder from "./UpdateOrder";
 
 function Order() {
   const order = useLoaderData();
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
+
   const {
     id,
     status,
@@ -22,6 +24,7 @@ function Order() {
     estimatedDelivery,
     cart,
   } = order;
+
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
   const fetcher = useFetcher();
@@ -31,8 +34,6 @@ function Order() {
       fetcher.load("/menu");
     }
   }, [fetcher]);
-
-  console.log(fetcher.data);
 
   return (
     <div className="px-8 py-9 space-y-6 mt-5">
@@ -67,7 +68,7 @@ function Order() {
         {cart.map((item) => (
           <OrderItem
             item={item}
-            key={item.key}
+            key={item.pizzaId}
             ingredients={
               fetcher?.data?.find((el) => el.id === item.pizzaId).ingredients ??
               []
@@ -84,6 +85,7 @@ function Order() {
           To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}
         </p>
       </div>
+      {!priority && <UpdateOrder />}
     </div>
   );
 }
